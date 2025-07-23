@@ -10,7 +10,6 @@ export default function BasketClient() {
   const [wilaya, setWilaya] = useState("");
   // Track quantities for each product (by index)
   const [quantities, setQuantities] = useState(basket.map(() => 1));
-  console.log(basket);
 
   // Update quantity for a product
   const handleQuantityChange = (idx, value) => {
@@ -63,9 +62,17 @@ export default function BasketClient() {
           </div>
         </form>
         {basket.length === 0 ? (
-          <p className="text-center text-gray-500 text-lg">
-            Your basket is empty.
-          </p>
+          <div className="flex flex-col items-center gap-4">
+            <p className="text-center text-gray-500 text-lg">
+              Your basket is empty.
+            </p>
+            <a
+              href="/produits"
+              className="inline-block px-6 py-3 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold shadow hover:from-blue-600 hover:to-purple-600 transition text-lg mt-2"
+            >
+              ← Return to Products
+            </a>
+          </div>
         ) : (
           <div>
             <ul className="divide-y divide-blue-100 mb-8">
@@ -97,7 +104,7 @@ export default function BasketClient() {
                       onChange={(e) =>
                         handleQuantityChange(idx, e.target.value)
                       }
-                      className="w-16 px-2 py-1 rounded border border-blue-200 text-center"
+                      className="text-black w-16 px-2 py-1 rounded border border-blue-200 text-center"
                     />
                     <button
                       onClick={() => removeFromBasket(idx)}

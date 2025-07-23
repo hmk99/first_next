@@ -80,13 +80,9 @@ export default function ProduitsClient({ products, path }) {
     } else if (sort === "price-desc") {
       filtered = [...filtered].sort((a, b) => b.price - a.price);
     } else if (sort === "date-desc") {
-      filtered = [...filtered].sort(
-        (a, b) => new Date(b.date) - new Date(a.date)
-      );
+      filtered = [...filtered].sort((a, b) => new Date(b.id) - new Date(a.id));
     } else if (sort === "date-asc") {
-      filtered = [...filtered].sort(
-        (a, b) => new Date(a.date) - new Date(b.date)
-      );
+      filtered = [...filtered].sort((a, b) => new Date(a.id) - new Date(b.id));
     }
     return filtered;
   }, [products, search, selectedGamme, sort]);
@@ -150,7 +146,7 @@ export default function ProduitsClient({ products, path }) {
           </button>
         </div>
         {/* Products Grid with AnimatePresence */}
-        <div className="grid gap-10 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <div className="grid gap-10 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 items-stretch">
           {loading || firstLoad ? (
             <LoadingSpinner />
           ) : filtered && filtered.length > 0 ? (

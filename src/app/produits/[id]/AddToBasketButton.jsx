@@ -9,7 +9,7 @@ export default function AddToBasketButton({ product, onFlyToBasket }) {
   const controls = useAnimation();
   const btnRef = useRef(null);
 
-  const isAdded = basket.some((item) => item.id === product.id);
+  const isAdded = basket.some((item) => item.gamme === product.gamme);
 
   const handleClick = async () => {
     if (isAdded) return;
@@ -22,7 +22,7 @@ export default function AddToBasketButton({ product, onFlyToBasket }) {
       id: product.id,
       gamme: product.gamme,
       price: product.price,
-      image: path + product.path,
+      image: product.image,
     });
     // Trigger fly-to-basket animation in parent (if provided)
     if (onFlyToBasket) onFlyToBasket();
@@ -31,7 +31,7 @@ export default function AddToBasketButton({ product, onFlyToBasket }) {
   return (
     <motion.button
       ref={btnRef}
-      className={` w-full py-4 mt-8 rounded-2xl text-xl font-bold shadow-lg transition-all duration-300 border-2 border-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400
+      className={` w-full py-4 px-1 mt-8 rounded-b-2xl text-md font-bold shadow-lg transition-all duration-300 border-2 focus:outline-none focus:ring-2 focus:ring-blue-400
         ${
           isAdded
             ? "bg-white text-blue-600 cursor-not-allowed"

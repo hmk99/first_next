@@ -22,6 +22,8 @@ export default function ProductDetailClient({
     return <LoadingSpinner />;
   }
 
+  console.log(product);
+
   // --- Badge logic ---
   // New: if product.date is within last 30 days
   // Best Seller: if product.price is in top 10% of related
@@ -96,7 +98,9 @@ export default function ProductDetailClient({
           <div className="text-blue-700 font-extrabold text-3xl md:text-4xl mb-6">
             {product.price} DA
           </div>
-          <AddToBasketButton product={product} />
+          <AddToBasketButton
+            product={{ ...product, image: path + product.path }}
+          />
         </div>
       </div>
       {/* Related Products Carousel */}

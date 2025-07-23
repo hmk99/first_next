@@ -3,6 +3,8 @@ import React from "react";
 import Image from "next/image";
 import { useBasket } from "./BasketContext";
 import Link from "next/link";
+import AddToBasketButton from "./produits/[id]/AddToBasketButton";
+import { motion, useAnimation } from "framer-motion";
 
 export default function Prod({
   id,
@@ -14,7 +16,6 @@ export default function Prod({
   isDsc,
 }) {
   const { basket, addToBasket } = useBasket();
-  console.log(dsc);
 
   // Check if this product is already in the basket
   const isAdded = basket.some(
@@ -32,7 +33,7 @@ export default function Prod({
   };
 
   return (
-    <div className=" bg-white/80 backdrop-blur-md rounded-3xl shadow-2xl hover:shadow-blue-300  border border-blue-100 group flex flex-col justify-between pt-6 gap-5 items-center hover:scale-105 transition-all duration-300 text-[#252525]">
+    <div className="h-full bg-white/80 backdrop-blur-md rounded-3xl shadow-2xl hover:shadow-blue-300  border border-blue-100 group flex flex-col justify-between pt-6 gap-5 items-center hover:scale-105 transition-all duration-300 text-[#252525]">
       <Link
         href={`/produits/${id}`}
         className="w-full flex justify-evenly items-center flex-col gap-5"
@@ -54,25 +55,18 @@ export default function Prod({
       </Link>
 
       <div className="flex w-full gap-2 px-2 pb-2">
-        <div
-          className={`flex-1 my-0 p-5 flex justify-center items-center font-bold rounded-b-2xl cursor-pointer transition-all duration-300 ${
-            isAdded ? "bg-white text-blue-600" : "bg-blue-600 text-white"
-          }`}
-          onClick={handleAdd}
-          style={isAdded ? { pointerEvents: "none" } : {}}
-        >
-          {isAdded ? "Ajouté !" : "Ajouter Au Panier"}
-        </div>
-        <button
-          className="flex-1 my-0 p-5 flex justify-center items-center font-bold rounded-b-2xl bg-purple-600 text-white hover:bg-purple-700 transition-all duration-300 shadow-lg"
+        <AddToBasketButton product={{ id, gamme, price, dsc, image }} />
+        <motion.button
+          className="w-full py-4 mt-8 rounded-b-2xl text-md font-bold shadow-lg transition-all duration-300 border-2 focus:outline-none focus:ring-2 focus:ring-purple-600 bg-purple-600 text-white hover:bg-purple-700 hover:scale-105"
           onClick={() =>
             onQuickView && onQuickView({ id, gamme, price, dsc, image })
           }
           aria-label="Quick View"
           type="button"
+          whileTap={{ scale: 0.95 }}
         >
           Quick View
-        </button>
+        </motion.button>
       </div>
     </div>
   );

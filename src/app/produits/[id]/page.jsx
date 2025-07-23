@@ -20,7 +20,7 @@ export async function generateStaticParams() {
 
 export default async function ProductDetail({ params }) {
   const path = "https://gnmc-dz.com/ecomm/";
-  const { id } = params;
+  const { id } = await params;
   let product = null;
   let related = [];
   let allProducts = [];

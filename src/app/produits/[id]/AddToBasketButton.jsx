@@ -35,7 +35,7 @@ export default function AddToBasketButton({ product, onFlyToBasket }) {
         ${
           isAdded
             ? "bg-white text-blue-600 cursor-not-allowed"
-            : "bg-blue-600 text-white hover:bg-blue-700 hover:scale-105"
+            : "bg-blue-600 text-white hover:bg-blue-700 hover:scale-105 cursor-pointer"
         }`}
       onClick={handleClick}
       disabled={isAdded}

@@ -5,6 +5,8 @@ import Image from "next/image";
 import { useEffect } from "react";
 
 export default function ProductQuickViewModal({ product, onClose }) {
+  console.log(product);
+
   useEffect(() => {
     const onEsc = (e) => {
       if (e.key === "Escape") onClose();
@@ -42,15 +44,14 @@ export default function ProductQuickViewModal({ product, onClose }) {
             src={product.image}
             alt={product.gamme}
             fill="true"
-            className="object-contain"
-            sizes="(max-width: 768px) 100vw, 400px"
+            className="object-contain h-full w-full "
             priority="true"
           />
         </div>
         <h2 className="text-2xl font-bold text-blue-700">{product.gamme}</h2>
         <p className="text-gray-700">{product.dsc}</p>
         <div className="text-blue-700 font-extrabold text-2xl">
-          {product.price} DA
+          {product.price} DZD
         </div>
         <AddToBasketButton product={product} />
       </motion.div>

@@ -57,7 +57,7 @@ export default function Prod({
       <div className="flex w-full gap-2 px-2 pb-2">
         <AddToBasketButton product={{ id, gamme, price, dsc, image }} />
         <motion.button
-          className="w-full py-4 mt-8 rounded-b-2xl text-md font-bold shadow-lg transition-all duration-300 border-2 focus:outline-none focus:ring-2 focus:ring-purple-600 bg-purple-600 text-white hover:bg-purple-700 hover:scale-105"
+          className="cursor-pointer w-full py-4 mt-8 rounded-b-2xl text-md font-bold shadow-lg transition-all duration-300 border-2 focus:outline-none focus:ring-2 focus:ring-purple-600 bg-purple-600 text-white hover:bg-purple-700 hover:scale-105"
           onClick={() =>
             onQuickView && onQuickView({ id, gamme, price, dsc, image })
           }

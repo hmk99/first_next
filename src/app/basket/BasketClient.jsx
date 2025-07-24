@@ -1,15 +1,28 @@
 "use client";
 import { useBasket } from "../BasketContext";
-import { useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 import LoadingSpinner from "../LoadingSpinner";
+import axios from "axios";
 
 export default function BasketClient() {
   const path = "https://gnmc-dz.com/ecomm/";
-  const { basket, removeFromBasket } = useBasket();
+  const { basket, removeFromBasket, setBasket } = useBasket();
   const [name, setName] = useState("");
   const [wilaya, setWilaya] = useState("");
+  const [phone, setPhone] = useState("");
   // Track quantities for each product (by index)
-  const [quantities, setQuantities] = useState(basket.map(() => 1));
+  const [quantities, setQuantities] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  // Sync quantities with basket length
+  useEffect(() => {
+    setQuantities((prev) => {
+      if (basket.length !== prev.length) {
+        return basket.map((_, i) => prev[i] || 1);
+      }
+      return prev;
+    });
+  }, [basket]);
 
   // Update quantity for a product
   const handleQuantityChange = (idx, value) => {
@@ -19,11 +32,60 @@ export default function BasketClient() {
   };
 
   // Calculate totals
-  const totalItems = quantities.reduce((sum, q) => sum + q, 0);
+  const totalItems = useMemo(
+    () => quantities.reduce((sum, q) => sum + q, 0),
+    [quantities, basket]
+  );
   const totalPrice = basket.reduce(
     (sum, item, idx) => sum + Number(item.price) * (quantities[idx] || 1),
     0
   );
+
+  const addCommande = async (prod) => {
+    try {
+      await axios.post("https://gnmc-dz.com/ecomm/addCommande", {
+        gamme: prod.gamme,
+        nom: prod.nom,
+        numTel: prod.numTel,
+        adr: prod.adr,
+        qte: prod.qte,
+      });
+      return true;
+    } catch (err) {
+      console.log(err);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCheckout = async () => {
+    setLoading(true);
+    for (let i = 0; i < basket.length; i++) {
+      const item = basket[i];
+      const order = {
+        gamme: item.gamme,
+        nom: name,
+        numTel: phone,
+        adr: wilaya,
+        qte: quantities[i] || 1,
+      };
+      const success = await addCommande(order);
+      if (!success) {
+        alert("Failed to place order for " + item.gamme);
+        setLoading(false);
+        return;
+      }
+    }
+    alert("Order placed successfully!");
+    setName("");
+    setWilaya("");
+    setPhone("");
+    setQuantities([]);
+    setBasket([]);
+    setLoading(false);
+    // Optionally clear basket here
+  };
 
   if (!basket) {
     return <LoadingSpinner />;
@@ -58,6 +120,18 @@ export default function BasketClient() {
               placeholder="Your Wilaya"
               value={wilaya}
               onChange={(e) => setWilaya(e.target.value)}
+            />
+          </div>
+          <div className="md:col-span-2">
+            <label className="block text-lg font-semibold text-blue-900 mb-2">
+              Phone Number
+            </label>
+            <input
+              type="tel"
+              className="w-full px-4 py-3 rounded-lg border-2 border-blue-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none text-blue-900 font-medium bg-blue-50"
+              placeholder="Your Phone Number"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
             />
           </div>
         </form>
@@ -127,9 +201,12 @@ export default function BasketClient() {
             </div>
             <button
               className="w-full py-4 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold text-xl shadow hover:from-blue-600 hover:to-purple-600 transition"
-              disabled={basket.length === 0}
+              disabled={
+                basket.length === 0 || loading || !name || !wilaya || !phone
+              }
+              onClick={handleCheckout}
             >
-              Checkout
+              {loading ? "Processing..." : "Checkout"}
             </button>
           </div>
         )}

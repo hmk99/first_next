@@ -3,10 +3,12 @@ import { useBasket } from "../BasketContext";
 import { useState, useMemo, useEffect } from "react";
 import LoadingSpinner from "../LoadingSpinner";
 import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function BasketClient() {
   const path = "https://gnmc-dz.com/ecomm/";
-  const { basket, removeFromBasket, setBasket } = useBasket();
+  const { basket, removeFromBasket, setBasket, clearBasket } = useBasket();
   const [name, setName] = useState("");
   const [wilaya, setWilaya] = useState("");
   const [phone, setPhone] = useState("");
@@ -72,19 +74,26 @@ export default function BasketClient() {
       };
       const success = await addCommande(order);
       if (!success) {
-        alert("Failed to place order for " + item.gamme);
+        toast.error(`Failed to place order for ${item.gamme}`);
         setLoading(false);
         return;
       }
     }
-    alert("Order placed successfully!");
+    toast.success("Order placed successfully!", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
     setName("");
     setWilaya("");
     setPhone("");
     setQuantities([]);
-    setBasket([]);
+    clearBasket();
     setLoading(false);
-    // Optionally clear basket here
   };
 
   if (!basket) {
@@ -93,6 +102,7 @@ export default function BasketClient() {
 
   return (
     <div className="p-8 min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-100">
+      <ToastContainer />
       <div className="max-w-2xl mx-auto bg-white rounded-3xl shadow-2xl p-8">
         <h1 className="text-4xl font-extrabold text-center text-blue-700 mb-8 tracking-tight drop-shadow-lg">
           🧺 Your Basket

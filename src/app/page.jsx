@@ -1,4 +1,5 @@
 import HomeClient from "./HomeClient";
+import { ToastContainer } from "react-toastify";
 
 export const generateMetadata = () => {
   return {

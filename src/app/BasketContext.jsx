@@ -25,8 +25,15 @@ export function BasketProvider({ children }) {
     setBasket((prev) => prev.filter((item, idx) => idx !== id));
   };
 
+  const clearBasket = () => {
+    setBasket([]);
+    localStorage.removeItem("basket"); // Clear the localStorage
+  };
+
   return (
-    <BasketContext.Provider value={{ basket, addToBasket, removeFromBasket }}>
+    <BasketContext.Provider
+      value={{ basket, addToBasket, removeFromBasket, clearBasket }}
+    >
       {children}
     </BasketContext.Provider>
   );
